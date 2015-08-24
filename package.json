@@ -1,6 +1,6 @@
 {
   "name": "constitute",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Minimalistic Dependency Injection (DI) for ES6",
   "main": "index.js",
   "scripts": {
