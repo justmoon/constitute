@@ -191,7 +191,7 @@ So far, we've only dealt with class dependencies. But classes (more specifically
 * `Alias(key, constitutor)` - Links to another key on the same container. You can use `Alias` to specify another key and when it is asked to instantiate a value it will call that other factory instead.
 * `Value(value)` - Doesn't instantiate anything, it simply returns the same value every time.
 * `Clone(value, constitutor)` - Creates a clone of the provided value.
-* `Factory(fn, constitutor)` - Allows you to specify a custom factory function.
+* `Method(fn, constitutor)` - Allows you to specify a custom factory function.
 
 #### `Class` factory
 
@@ -260,16 +260,16 @@ container.constitute(A) // => The answer is undefined
 
 *TODO: Not yet implemented*
 
-#### `Factory` ... factory?
+#### `Method` factory
 
-With `Factory`, you can define your own factory function. Wield this power wisely.
+With `Method`, you can define your own factory function. Wield this power wisely.
 
 ``` js
-import { Factory } from 'constitute'
+import { Method } from 'constitute'
 
 class C { }
 
-const B = new Factory(function (c) {
+const B = new Method(function (c) {
   return { c }
 }, [ C ])
 
