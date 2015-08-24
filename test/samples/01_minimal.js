@@ -1,7 +1,5 @@
 'use strict'
 
-const expect = require('chai').expect
-
 module.exports = function () {
   class B {}
 
