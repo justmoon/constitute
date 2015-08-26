@@ -47,6 +47,19 @@ describe('Container', function () {
       expect(a.b).to.be.instanceOf(this.minimal.B)
     })
 
+    it('should instantiate classes when called', function () {
+      this.env = require('./samples/08_multiple')()
+      const a = this.container.constitute(this.env.A)
+
+      expect(a).to.be.instanceOf(this.env.A)
+      expect(a.b).to.be.instanceOf(this.env.B)
+      expect(a.c).to.be.instanceOf(this.env.C)
+      expect(a.d).to.be.instanceOf(this.env.D)
+      expect(a.c.e).to.be.instanceOf(this.env.E)
+      expect(a.d.e).to.be.instanceOf(this.env.E)
+      expect(a.d.f).to.be.instanceOf(this.env.F)
+    })
+
     it('should instantiate only one singleton when called twice', function () {
       this.minimal = require('./samples/01_minimal')()
       const a1 = this.container.constitute(this.minimal.A)
