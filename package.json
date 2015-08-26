@@ -1,10 +1,10 @@
 {
   "name": "constitute",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Minimalistic Dependency Injection (DI) for ES6",
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/justmoon/constitute.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/justmoon/constitute.git"
   },
   "main": "index.js",
   "scripts": {
