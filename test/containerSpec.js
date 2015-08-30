@@ -70,7 +70,7 @@ describe('Container', function () {
       expect(a.b).to.be.instanceOf(this.env.B)
     })
 
-    it('should instantiate classes when called', function () {
+    it('should instantiate classes when called on classes with multiple dependencies', function () {
       this.env = require('./samples/08_multiple')()
       const a = this.container.constitute(this.env.A)
 
@@ -186,6 +186,15 @@ describe('Container', function () {
       expect(a.b).to.be.a('function')
       expect(a.b()).to.be.instanceOf(this.env.B)
     })
+
+    it('should only return cached instances when using the Optional resolver', function () {
+      this.env = require('./samples/11_optional')()
+
+      const a = this.container.constitute(this.env.A)
+
+      expect(a).to.be.instanceOf(this.env.A)
+      expect(a.b).to.be.undefined
+    })
   })
 
   describe('bindNull', function () {
@@ -221,7 +230,7 @@ describe('Container', function () {
       this.container = new Container()
     })
 
-    it('should create a value factory', function () {
+    it('should create a method factory', function () {
       class A {}
       class B {}
       this.container.bindMethod(A, function () {
