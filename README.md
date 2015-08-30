@@ -206,32 +206,65 @@ class A {
   static constitute () { return [ B ] }
   constructor (b) { ... }
 }
+
+const a = constitute(A)
 ```
 
 Is the same as this:
 
 ``` js
-import { Class } from 'constitute'
+import constitute, { Class } from 'constitute'
 
 class ActualA {
   constructor (b) { ... }
 }
-const A = new Class(UnableToModify, [ B ])
+const A = new Class(ActualA, [ B ])
+
+const a = constitute(A)
 ```
 
 Just make sure when you specify your dependencies to reference this Class as `A`, not as `ActualA`. Although you could of course bind `ActualA` to `A`:
 
 ``` js
-myContainer.bind(ActualA, A)
+myContainer.bindClass(ActualA, A)
 ```
 
 After that, both `A` and `ActualA` would resolve to your `Class` factory with the correct dependencies.
 
+To add metadata to existing classes, you can also use the `container.bindClass` convenience wrapper:
+
+``` js
+import { Container } from 'constitute'
+
+class A {
+  constructor (b) { ... }
+}
+
+const container = new Container()
+// Bind the key A to a ClassFactory for A with a Singleton constitutor and a single dependency, B
+container.bindClass(A, A, [ B ])
+
+const a = container.constitute(A)
+```
+
 #### `Alias` factory
 
-The `Alias` factory can be used to cause a lookup for another key in the current container and use that key's factory instead.
+The `Alias` factory can be used to cause a lookup for another key in the current container and use that key's factory instead. By default, `Alias` factories will use the `Transient` constitutor, meaning the alias mapping will be resolved every time the aliased key is requested. The alias target uses its own constitutor as normal, so the target may still be a cached instance.
 
+``` js
+class A {}
+class B extends A {}
 
+const container = new Container()
+container.bindAlias(A, B)
+const instance = container.constitute(A)
+
+console.log(instance instanceof B) // => true
+
+// Note that the alias respects any later bindings of the target Key
+container.bindValue(B, 65537)
+console.log(container.constitute(A)) // => 65537
+```
 
 #### `Value` factory
 
@@ -249,20 +282,48 @@ class A {
   }
 }
 
+class B extends A {}
+
 constitute(A) // => The answer is 42
 
+// Like all factories, Value factories support binding, so we can override the value later
 const container = new Container()
-container.bind(V, new Value(undefined))
-container.constitute(A) // => The answer is undefined
+container.bindValue(V, undefined)
+container.constitute(B) // => The answer is undefined
 ```
 
 #### `Clone` factory
 
-*TODO: Not yet implemented*
+Similar to the `Value` factory, but returns a clone of the value (for objects and arrays) instead of the value itself. Defaults to the `Transient` constitutor.
+
+``` js
+import constitute, { Clone, Container } from 'constitute'
+
+const V = new Clone({ foo: 'bar' })
+
+class A {
+  static constitute () { return [ V ] }
+  constructor (v) {
+    this.v = v
+  }
+}
+
+class B extends A {}
+
+const a = constitute(A)
+const b = constitute(B)
+
+a.v.foo = 'baz'
+
+console.log(a.v.foo) // => 'baz'
+console.log(b.v.foo) // => 'bar'
+```
 
 #### `Method` factory
 
 With `Method`, you can define your own factory function. Wield this power wisely.
+
+Your factory function is called with the dependencies as the parameters and the container as `this`.
 
 ``` js
 import { Method } from 'constitute'

@@ -27,5 +27,8 @@
     "eslint-plugin-standard": "^1.2.0",
     "istanbul-harmony": "^0.3.16",
     "mocha": "^2.2.5"
+  },
+  "dependencies": {
+    "clone": "^1.0.2"
   }
 }

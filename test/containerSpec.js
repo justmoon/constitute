@@ -112,6 +112,7 @@ describe('Container', function () {
       const a1 = this.container.constitute(this.env.A)
       const a2 = this.container.constitute(this.env.A)
 
+      expect(a1).to.not.equal(a2)
       expect(a1).to.be.instanceOf(this.env.A)
       expect(a2).to.be.instanceOf(this.env.A)
       expect(a1.b).to.be.instanceOf(this.env.B)
@@ -143,6 +144,33 @@ describe('Container', function () {
 
       expect(a).to.be.instanceOf(this.env.A)
       expect(a.b).to.be.instanceOf(this.env.C)
+    })
+
+    it('should return a copy of the data when using the clone factory', function () {
+      this.env = require('./samples/06_clone')()
+
+      const a = this.container.constitute(this.env.A)
+
+      expect(a).to.be.instanceOf(this.env.A)
+      expect(a.b).to.deep.equal(this.env.data)
+      expect(a.b).to.not.equal(this.env.data)
+    })
+
+    it('should return independent instances when using the clone factory', function () {
+      this.env = require('./samples/06_clone')()
+
+      const a1 = this.container.constitute(this.env.A)
+      const a2 = this.container.constitute(this.env.A)
+
+      a2.b.foo = 'baz'
+
+      expect(a1.b).to.not.equal(a2.b)
+      expect(a1).to.be.instanceOf(this.env.A)
+      // Check against static data also in case we somehow modified the original object
+      expect(a1.b).to.deep.equal({ foo: 'bar' })
+      expect(a1.b).to.deep.equal(this.env.data)
+      expect(a2).to.be.instanceOf(this.env.A)
+      expect(a2.b).to.deep.equal({ foo: 'baz' })
     })
 
     it('should call factory method when using a method factory', function () {
@@ -218,6 +246,43 @@ describe('Container', function () {
 
       const a = this.container.constitute(A)
       expect(a).to.equal(null)
+    })
+  })
+
+  describe('bindAlias', function () {
+    beforeEach(function () {
+      this.container = new Container()
+    })
+
+    it('should redirect a key to another key', function () {
+      class A {}
+      class B {}
+      this.container.bindAlias(A, B)
+
+      const a = this.container.constitute(A)
+      expect(a).to.be.instanceOf(B)
+    })
+
+    it('should redirect through several levels', function () {
+      class A {}
+      class B {}
+      class C {}
+      this.container.bindAlias(A, B)
+      this.container.bindAlias(B, C)
+
+      const a = this.container.constitute(A)
+      expect(a).to.be.instanceOf(C)
+    })
+
+    it('should follow remaps', function () {
+      class A {}
+      class B {}
+      class C {}
+      this.container.bindAlias(A, B)
+      this.container.bindClass(B, C)
+
+      const a = this.container.constitute(A)
+      expect(a).to.be.instanceOf(C)
     })
   })
 
