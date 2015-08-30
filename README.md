@@ -344,6 +344,43 @@ export default class A {
 console.log(constitute(A).b.c instanceof C) // => true
 ```
 
+### Container hierarchy
+
+You can create subcontainers to override dependencies locally without affecting upstream bindings.
+
+``` js
+import { Container } from 'constitute'
+
+const masterContainer = new Container()
+const subContainer = masterContainer.createChild()
+
+class A {}
+class B {}
+
+subContainer.bindClass(A, B)
+
+console.log(subContainer.constitute(A) instanceof B) // => true
+console.log(masterContainer.constitute(A) instanceof A) // => true
+```
+
+Subcontainers also use an inheritance-aware cache. If a class has already been instantiated on the parent (and it is using a per-container caching constitutor, such as Singleton) it will be returned from cache.
+
+``` js
+import { Container } from 'constitute'
+
+class A {}
+
+const masterContainer = new Container()
+const subContainer = masterContainer.createChild()
+
+const a1 = masterContainer.constitute(A)
+const a2 = subContainer.constitute(A)
+
+console.log(a1 === a2) // => true
+```
+
+If a class has already been instantiated in the subcontainer, the subcontainer will continue to use that cached instance even if the parent container later creates an instance of its own.
+
 ## Acknowledgements
 
 This library borrows heavily from the fantastic [DI component](https://github.com/aurelia/dependency-injection) in the [Aurelia framework](http://aurelia.io/). Awesome stuff.

@@ -442,4 +442,84 @@ describe('Container', function () {
       expect(a).to.be.a('object')
     })
   })
+
+  describe('createChild', function () {
+    it('should return a valid container', function () {
+      const masterContainer = new Container()
+      const subContainer = masterContainer.createChild()
+
+      expect(subContainer).to.be.instanceOf(Container)
+    })
+
+    it('should inherit mapping from the parent', function () {
+      const masterContainer = new Container()
+      const subContainer = masterContainer.createChild()
+
+      class A {}
+      class B {}
+
+      masterContainer.bindClass(A, B)
+
+      expect(masterContainer.constitute(A)).to.be.instanceOf(B)
+      expect(subContainer.constitute(A)).to.be.instanceOf(B)
+    })
+
+    it('should not propagate mappings to the parent', function () {
+      const masterContainer = new Container()
+      const subContainer = masterContainer.createChild()
+
+      class A {}
+      class B {}
+
+      subContainer.bindClass(A, B)
+
+      expect(masterContainer.constitute(A)).to.be.instanceOf(A)
+      expect(subContainer.constitute(A)).to.be.instanceOf(B)
+    })
+
+    it('should accumulate All resolvers with the parent', function () {
+      const masterContainer = new Container()
+      const subContainer = masterContainer.createChild()
+
+      this.env = require('./samples/09_plugin')()
+      masterContainer.bindClass(this.env.Plugin, this.env.A)
+      masterContainer.bindClass(this.env.Plugin, this.env.B)
+      class C extends this.env.Plugin {}
+      subContainer.bindClass(this.env.Plugin, C)
+
+      const app = subContainer.constitute(this.env.App)
+
+      expect(app).to.be.instanceOf(this.env.App)
+      expect(app.plugins).to.have.length(3)
+      expect(app.plugins[0]).to.be.instanceOf(this.env.A)
+      expect(app.plugins[1]).to.be.instanceOf(this.env.B)
+      expect(app.plugins[2]).to.be.instanceOf(C)
+    })
+
+    it('should use parent cache', function () {
+      class A {}
+
+      const masterContainer = new Container()
+      const subContainer = masterContainer.createChild()
+
+      const a1 = masterContainer.constitute(A)
+      const a2 = subContainer.constitute(A)
+
+      expect(a1).to.equal(a2)
+    })
+
+    it('should not influence parent cache, but should stick to own if already populated', function () {
+      class A {}
+
+      const masterContainer = new Container()
+      const subContainer = masterContainer.createChild()
+
+      const a2 = subContainer.constitute(A)
+      const a1 = masterContainer.constitute(A)
+      const a3 = subContainer.constitute(A)
+
+      expect(a1).to.not.equal(a2)
+      expect(a2).to.equal(a3)
+    })
+  })
 })
