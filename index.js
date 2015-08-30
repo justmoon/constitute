@@ -26,6 +26,7 @@ constitute.Method = require('./lib/factories/method')
 // Resolvers
 constitute.Instance = require('./lib/resolvers/instance')
 constitute.All = require('./lib/resolvers/all')
+constitute.Lazy = require('./lib/resolvers/lazy')
 
 // Other classes
 constitute.Container = Container

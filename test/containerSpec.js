@@ -176,6 +176,16 @@ describe('Container', function () {
       expect(app.plugins[0]).to.be.instanceOf(this.env.A)
       expect(app.plugins[1]).to.be.instanceOf(this.env.B)
     })
+
+    it('should create lazy resolver methods when using the Lazy resolver', function () {
+      this.env = require('./samples/10_lazy')()
+
+      const a = this.container.constitute(this.env.A)
+
+      expect(a).to.be.instanceOf(this.env.A)
+      expect(a.b).to.be.a('function')
+      expect(a.b()).to.be.instanceOf(this.env.B)
+    })
   })
 
   describe('bindNull', function () {
