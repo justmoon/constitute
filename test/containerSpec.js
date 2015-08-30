@@ -34,6 +34,28 @@ describe('Container', function () {
     })
   })
 
+  describe('findAllFactories', function () {
+    it('should find all factories in insertion order', function () {
+      const container = new Container()
+      class A {}
+      const facA = new ValueFactory(10)
+      const facB = new ValueFactory(20)
+      container.bindCustom(A, facA)
+      container.bindCustom(A, facB)
+
+      const factories = container.findAllFactories(A)
+      expect(factories).to.deep.equal([facA, facB])
+    })
+
+    it('should return an empty array if there are no factories', function () {
+      class A {}
+      const container = new Container()
+      const factories = container.findAllFactories(A)
+      expect(factories).to.be.instanceOf(Array)
+      expect(factories).to.be.empty
+    })
+  })
+
   describe('constitute', function () {
     beforeEach(function () {
       this.container = new Container()
@@ -140,6 +162,19 @@ describe('Container', function () {
 
       expect(a).to.be.instanceOf(env.A)
       expect(a.b).to.be.instanceOf(MockB)
+    })
+
+    it('should instantiate all classes when using the All resolver', function () {
+      this.env = require('./samples/09_plugin')()
+      this.container.bindClass(this.env.Plugin, this.env.A)
+      this.container.bindClass(this.env.Plugin, this.env.B)
+
+      const app = this.container.constitute(this.env.App)
+
+      expect(app).to.be.instanceOf(this.env.App)
+      expect(app.plugins).to.have.length(2)
+      expect(app.plugins[0]).to.be.instanceOf(this.env.A)
+      expect(app.plugins[1]).to.be.instanceOf(this.env.B)
     })
   })
 

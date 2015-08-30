@@ -9,6 +9,8 @@ function constitute (Class) {
   return container.constitute(Class)
 }
 
+// TODO Separate main exports from shorthand exports
+
 // Constitutors
 constitute.Global = require('./lib/constitutors/global')
 constitute.Singleton = require('./lib/constitutors/singleton')
@@ -20,6 +22,10 @@ constitute.Value = require('./lib/factories/value')
 constitute.Alias = require('./lib/factories/alias')
 constitute.Class = require('./lib/factories/class')
 constitute.Method = require('./lib/factories/method')
+
+// Resolvers
+constitute.Instance = require('./lib/resolvers/instance')
+constitute.All = require('./lib/resolvers/all')
 
 // Other classes
 constitute.Container = Container
