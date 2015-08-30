@@ -187,13 +187,23 @@ describe('Container', function () {
       expect(a.b()).to.be.instanceOf(this.env.B)
     })
 
-    it('should only return cached instances when using the Optional resolver', function () {
+    it('should return undefined for uncached instances when using the Optional resolver', function () {
       this.env = require('./samples/11_optional')()
 
       const a = this.container.constitute(this.env.A)
 
       expect(a).to.be.instanceOf(this.env.A)
       expect(a.b).to.be.undefined
+    })
+
+    it('should return cached instances when using the Optional resolver', function () {
+      this.env = require('./samples/11_optional')()
+
+      this.container.constitute(this.env.B)
+      const a = this.container.constitute(this.env.A)
+
+      expect(a).to.be.instanceOf(this.env.A)
+      expect(a.b).to.be.instanceOf(this.env.B)
     })
   })
 
