@@ -315,7 +315,7 @@ describe('Container', function () {
       expect(a2).to.equal(1)
     })
 
-    it('should throw when the factory is not a subclass of NullFactory', function () {
+    it('should throw when the factory is not a subclass of BaseFactory', function () {
       class A {}
       const container = this.container
       expect(function () {

@@ -12,22 +12,46 @@ function constitute (Class) {
 // TODO Separate main exports from shorthand exports
 
 // Constitutors
-constitute.Global = require('./lib/constitutors/global')
-constitute.Singleton = require('./lib/constitutors/singleton')
-constitute.Transient = require('./lib/constitutors/transient')
+constitute.BaseConstitutor = require('./lib/constitutors/base')
+constitute.GlobalConstitutor = require('./lib/constitutors/global')
+constitute.SingletonConstitutor = require('./lib/constitutors/singleton')
+constitute.TransientConstitutor = require('./lib/constitutors/transient')
 
 // Factories
-constitute.Null = require('./lib/factories/null')
-constitute.Value = require('./lib/factories/value')
-constitute.Alias = require('./lib/factories/alias')
-constitute.Class = require('./lib/factories/class')
-constitute.Method = require('./lib/factories/method')
+constitute.BaseFactory = require('./lib/factories/base')
+constitute.NullFactory = require('./lib/factories/null')
+constitute.ValueFactory = require('./lib/factories/value')
+constitute.AliasFactory = require('./lib/factories/alias')
+constitute.ClassFactory = require('./lib/factories/class')
+constitute.MethodFactory = require('./lib/factories/method')
 
 // Resolvers
-constitute.Instance = require('./lib/resolvers/instance')
-constitute.All = require('./lib/resolvers/all')
-constitute.Lazy = require('./lib/resolvers/lazy')
-constitute.Optional = require('./lib/resolvers/optional')
+constitute.BaseResolver = require('./lib/resolvers/base')
+constitute.InstanceResolver = require('./lib/resolvers/instance')
+constitute.AllResolver = require('./lib/resolvers/all')
+constitute.LazyResolver = require('./lib/resolvers/lazy')
+constitute.OptionalResolver = require('./lib/resolvers/optional')
+
+// Constitutors shorthand
+constitute.Constitutor = constitute.BaseConstitutor
+constitute.Global = constitute.GlobalConstitutor
+constitute.Singleton = constitute.SingletonConstitutor
+constitute.Transient = constitute.TransientConstitutor
+
+// Factories shorthand
+constitute.Factory = constitute.BaseFactory
+constitute.Null = constitute.NullFactory
+constitute.Value = constitute.ValueFactory
+constitute.Alias = constitute.AliasFactory
+constitute.Class = constitute.ClassFactory
+constitute.Method = constitute.MethodFactory
+
+// Resolvers shorthand
+constitute.Resolver = constitute.BaseResolver
+constitute.Instance = constitute.InstanceResolver
+constitute.All = constitute.AllResolver
+constitute.Lazy = constitute.LazyResolver
+constitute.Optional = constitute.OptionalResolver
 
 // Other classes
 constitute.Container = Container
