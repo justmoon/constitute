@@ -9,7 +9,8 @@
   "main": "index.js",
   "scripts": {
     "test": "node node_modules/.bin/istanbul test -- _mocha",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "codecov": "cat coverage/lcov.info | codecov"
   },
   "keywords": [
     "dependency",
@@ -22,6 +23,7 @@
   "license": "ISC",
   "devDependencies": {
     "chai": "^3.2.0",
+    "codecov.io": "^0.1.6",
     "eslint": "^1.2.1",
     "eslint-config-standard": "^4.1.0",
     "eslint-plugin-standard": "^1.2.0",
