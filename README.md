@@ -1,4 +1,11 @@
-# Constitute [![Build status](https://travis-ci.org/justmoon/constitute.svg)](https://travis-ci.org/justmoon/constitute) [![codecov.io](http://codecov.io/github/justmoon/constitute/coverage.svg?branch=master)](http://codecov.io/github/justmoon/constitute?branch=master)
+# Constitute [![npm][npm-image]][npm-url] [![travis][travis-image]][travis-url] [![codecov][codecov-image]][codecov-url]
+
+[npm-image]: https://img.shields.io/npm/v/constitute.svg?style=flat
+[npm-url]: https://npmjs.org/package/constitute
+[travis-image]: https://travis-ci.org/justmoon/constitute.svg
+[travis-url]: https://travis-ci.org/justmoon/constitute
+[codecov-image]: http://codecov.io/github/justmoon/constitute/coverage.svg?branch=master
+[codecov-url]: http://codecov.io/github/justmoon/constitute?branch=master
 
 > Minimalistic Dependency Injection (DI) for ES6
 
