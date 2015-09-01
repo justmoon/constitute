@@ -1,4 +1,4 @@
-# Constitute
+# Constitute [![Build status](https://travis-ci.org/justmoon/constitute.svg)](https://travis-ci.org/justmoon/constitute) [![codecov.io](http://codecov.io/github/justmoon/constitute/coverage.svg?branch=master)](http://codecov.io/github/justmoon/constitute?branch=master)
 
 > Minimalistic Dependency Injection (DI) for ES6
 
