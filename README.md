@@ -6,20 +6,29 @@
 
 There are lots of good resources out there on Dependency Injection (DI) and Inversion of Control (IoC). For JavaScript developers, [Vojta Jina's ng-conf presentation](https://www.youtube.com/watch?v=_OGGsf1ZXMs) is a fantastic primer.
 
-For many smaller apps, using plain ol' Node.js modules work just fine. But if you find yourself spending a lot of time wiring classes together with functions like this:
+For many smaller apps, using plain ol' Node.js modules works just fine. But sometimes you find yourself spending a lot of time wiring classes together like this:
 
 ``` js
-function main() {
-  var electricity = new Electricity();
-  var grinder = new Grinder(electricity);
-  var heater = new Heater(electricity);
-  var pump = new Pump(heater, electricity);
-  var coffeeMaker = new CoffeeMaker(grinder, pump, heater);
-  coffeeMaker.brew();
+function main () {
+  const electricity = new Electricity()
+  const grinder = new Grinder(electricity)
+  const heater = new Heater(electricity)
+  const pump = new Pump(heater, electricity)
+  const coffeeMaker = new CoffeeMaker(grinder, pump, heater)
+  coffeeMaker.brew()
 }
 ```
 
-Then consider looking into Dependency Injection.
+Dependency Injection using tools like `constitute` can turn that into:
+
+``` js
+function main () {
+  const coffeeMaker = constitute(CoffeeMaker)
+  coffeeMaker.brew()
+}
+```
+
+Your classes remain easily testable and life is good.
 
 ## Why this library?
 
@@ -51,14 +60,19 @@ export default class A {
 }
 ```
 
-The class `B` is defined without any special sugar.
+The classes `B` and `C` are defined without any special sugar:
 
 **B.js**
 ``` js
 export default class B {}
 ```
 
-We'll skip `C` - you get the idea.
+**C.js**
+``` js
+export default class C {}
+```
+
+Because these classes do not have any dependencies, we don't need to annotate them.
 
 So how do we instantiate our annotated class `A`?
 
@@ -99,16 +113,16 @@ There are different types of resolvers:
 
 * `Instance` - The default resolver. Resolves the dependency immediately and provides it as the value
 * `Lazy` - Provides a function which resolves the dependency when called, returning the value
-* `All` - Provides an array of all values bound to the provided key (see *Binding* below)
-* `Optional` - Injects an instance of a class only if it already exists in the container; null otherwise.
+* `All` - Provides an array of values for all dependencies bound to the provided key (see *Binding* below)
+* `Optional` - Injects a value only if the dependency already exists in the container; `undefined` otherwise
 
 ### Constitutors
 
-You can also change how your dependencies are instantiated. There are two built-in policies:
+You can also change how your dependencies are instantiated. There are three built-in policies:
 
-* `Singleton` - The default. Your dependency is called with the `new` keyword and the resulting value is reused as a singleton within the same injection container.
-* `Global` - Like a singleton, except the same instance is used even across containers. **Warning: Use of globals is generally discouraged. According to some, globals are ok for some very specific use cases, such as clocks and loggers.**
-* `Transient` - Your dependency is called with the `new` keyword every time it is resolved.
+* `Singleton` - The default. Your dependency is instantiated once per container.
+* `Global` - Like a singleton, except the same instance is used even across containers. **Warning: Use of globals is generally discouraged. According to some, globals are ok for very specific use cases, such as clocks and loggers.**
+* `Transient` - Your dependency is instantiated every time it is resolved.
 
 To use a different constitutor, simply return it from the `constitute` method:
 
