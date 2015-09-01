@@ -3,6 +3,7 @@ node_js:
   - "iojs-v2.0.0"
   - "iojs"
 script:
+  - npm run lint
   - npm test --coverage
 after_script:
   - npm run codecov

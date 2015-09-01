@@ -22,7 +22,6 @@ describe('BaseFactory', function () {
   })
 })
 
-
 describe('BaseResolver', function () {
   it('cannot be instantiated', function () {
     expect(function () {
