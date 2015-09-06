@@ -233,6 +233,12 @@ describe('Container', function () {
       expect(a).to.be.instanceOf(this.env.A)
       expect(a.b).to.be.instanceOf(this.env.B)
     })
+
+    it('should return itself when asking for a Container', function () {
+      const container = this.container.constitute(Container)
+
+      expect(container).to.equal(this.container)
+    })
   })
 
   describe('bindNull', function () {

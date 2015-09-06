@@ -365,7 +365,22 @@ export default class A {
 console.log(constitute(A).b.c instanceof C) // => true
 ```
 
-### Container hierarchy
+### Containers
+
+All instances (except for dependencies using the `Global` constitutor) are isolated within `Container`s. To get the container your instance lives in, just request `Container` as a dependency:
+
+``` js
+import { Container } from 'constitute'
+
+class A {
+  static constitute () { return [ Container ] }
+  constructor (container) {
+    // container is the current container context
+  }
+}
+```
+
+#### Container hierarchy
 
 You can create subcontainers to override dependencies locally without affecting upstream bindings.
 
