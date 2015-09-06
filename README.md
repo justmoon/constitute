@@ -13,7 +13,7 @@
 
 There are lots of good resources out there on Dependency Injection (DI) and Inversion of Control (IoC). For JavaScript developers, [Vojta Jina's ng-conf presentation](https://www.youtube.com/watch?v=_OGGsf1ZXMs) is a fantastic primer.
 
-For many smaller apps, using plain ol' Node.js modules works just fine. But sometimes you find yourself spending a lot of time wiring classes together like this:
+For many smaller apps, using plain ol' Node.js modules works just fine. But eventually you want more control over when your components get instantiated. So you switch to classes and inject your dependencies via the constructor. But now you have annoying glue code like this to maintain:
 
 ``` js
 function main () {
@@ -26,7 +26,7 @@ function main () {
 }
 ```
 
-Dependency Injection using tools like `constitute` can turn that into:
+Tools like `constitute` can turn that into:
 
 ``` js
 function main () {
@@ -39,7 +39,7 @@ Your classes remain easily testable and life is good.
 
 ## Why this library?
 
-Awesome Dependency Injection frameworks are on the way for JavaScript. Like the one in [Angular 2](http://blog.thoughtram.io/angular/2015/05/18/dependency-injection-in-angular-2.html). But I wanted a module which is independent from any framework and works in vanilla ES6/Node.js without any transpiling.
+Awesome Dependency Injection frameworks are on the way for JavaScript. Like the one in [Angular 2](http://blog.thoughtram.io/angular/2015/05/18/dependency-injection-in-angular-2.html). But I wanted a module which is independent from any framework and works in ES5/ES6/ES7 with or without transpiling.
 
 ## Installation
 
@@ -49,7 +49,7 @@ npm install --save constitute
 
 ## Usage
 
-Let's look at an example. For this README I'm going to use ES6 modules syntax. If you need CommonJS (`require`) style, please look in `example/cjs`.
+Let's look at an example. For this README I'm going to use ES6 modules syntax. If you need CommonJS (`require`) style, please look in `example/es6-cjs`.
 
 Suppose we have three classes `A`, `B` and `C`. `A` depends on `B` and `C`. There are no other dependencies. We need to tell `constitute` that `A` depends on `B` and `C`. We also call the dependencies "constituents".
 
