@@ -181,6 +181,33 @@ describe('Container', function () {
       expect(a.b.c).to.be.instanceOf(this.env.C)
     })
 
+    it('should automatically detect annotations on method factories', function () {
+      class B {}
+      A.constitute = [ B ]
+      function A (b) {
+        return { b }
+      }
+
+      this.container.bindMethod(A, A)
+      const a = this.container.constitute(A)
+
+      expect(a).to.be.an('object')
+      expect(a.b).to.be.instanceOf(B)
+    })
+
+    it('should throw when an anonymous method factory has an invalid annotation', function () {
+      const container = this.container
+      expect(function () {
+        var A = function (b) {
+          return { b }
+        }
+        A.constitute = function () { return 'bleh' }
+
+        container.bindMethod(A, A)
+        container.constitute(A)
+      }).to.throw(Error, /The constitute annotation in factory \[anonymous\] returned an invalid value of type string \(should have been an array or a constitutor function\)/)
+    })
+
     it('should let you mock a class via binding', function () {
       class MockB {}
 

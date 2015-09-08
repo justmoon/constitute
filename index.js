@@ -33,6 +33,9 @@ constitute.AllResolver = require('./lib/resolvers/all')
 constitute.LazyResolver = require('./lib/resolvers/lazy')
 constitute.OptionalResolver = require('./lib/resolvers/optional')
 
+// Decorators
+constitute.Dependencies = require('./lib/decorators/dependencies')
+
 // Constitutors shorthand
 constitute.Constitutor = constitute.BaseConstitutor
 constitute.Global = constitute.GlobalConstitutor

@@ -9,7 +9,7 @@
   "main": "index.js",
   "scripts": {
     "test": "node node_modules/.bin/istanbul test -- _mocha",
-    "lint": "eslint .",
+    "lint": "eslint --ext .js --ext es7 .",
     "codecov": "cat coverage/lcov.info | codecov"
   },
   "keywords": [
@@ -22,6 +22,8 @@
   "author": "Stefan Thomas <justmoon@members.fsf.org>",
   "license": "ISC",
   "devDependencies": {
+    "babel": "^5.8.23",
+    "babel-eslint": "^4.1.1",
     "chai": "^3.2.0",
     "codecov.io": "^0.1.6",
     "eslint": "^1.2.1",
