@@ -67,6 +67,21 @@ export default class A {
 }
 ```
 
+If you are transpiling, you can also use an ES7-style decorator:
+
+**A.js** *(alternative with ES7 decorator)*
+```
+import { Dependencies } from 'constitute'
+
+@Dependencies(B, C)
+export default class A {
+  constructor (b, c) {
+    this.b = b
+    this.c = c
+  }
+}
+```
+
 The classes `B` and `C` are defined without any special sugar:
 
 **B.js**
