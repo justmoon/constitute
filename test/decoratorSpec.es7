@@ -1,7 +1,7 @@
 'use strict'
 
 import { expect } from 'chai'
-import constitute, { Dependencies, Lazy, Constitutor, Singleton, Transient } from '../'
+import constitute, { Dependencies, Lazy, Constitutor, Transient } from '../'
 
 describe('@Dependencies', function () {
   it('should decorate classes with metadata', function () {
@@ -51,7 +51,7 @@ describe('@Dependencies', function () {
     class C {}
 
     Dependencies(B, Lazy.of(C))(A)
-    function A(b, lazyC) {
+    function A (b, lazyC) {
       return {
         b,
         c: lazyC()
