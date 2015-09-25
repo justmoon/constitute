@@ -1,6 +1,10 @@
 'use strict'
 
-const expect = require('chai').expect
+const chai = require('chai')
+const expect = chai.expect
+const sinon = require('sinon')
+const sinonChai = require('sinon-chai')
+chai.use(sinonChai)
 const Container = require('../').Container
 const ValueFactory = require('../').Value
 const ClassFactory = require('../').Class
@@ -577,6 +581,78 @@ describe('Container', function () {
 
       expect(a1).to.not.equal(a2)
       expect(a2).to.equal(a3)
+    })
+  })
+
+  describe('schedulePostConstructor', function () {
+    beforeEach(function () {
+      this.container = new Container()
+    })
+
+    it('should run the post-constructor before finishing constitution', function () {
+      const postConstructor = sinon.spy()
+      class A {
+        static constitute () { return [ Container ] }
+        constructor (container) {
+          container.schedulePostConstructor(postConstructor)
+        }
+      }
+
+      const a = this.container.constitute(A)
+
+      expect(postConstructor).to.have.been.calledOnce
+      expect(postConstructor).to.have.been.calledOn(a)
+      expect(postConstructor).to.have.been.calledWithExactly()
+    })
+
+    it('should run the post-constructor with dependencies', function () {
+      const postConstructor = sinon.spy()
+      class A {
+        static constitute () { return [ Container ] }
+        constructor (container) {
+          container.schedulePostConstructor(postConstructor, [ Container ])
+        }
+      }
+
+      const a = this.container.constitute(A)
+
+      expect(postConstructor).to.have.been.calledOnce
+      expect(postConstructor).to.have.been.calledOn(a)
+      expect(postConstructor).to.have.been.calledWithExactly(this.container)
+    })
+
+    it('should run the post-constructor even if class depends on itself', function () {
+      const postConstructor = sinon.spy()
+      class A {
+        static constitute () { return [ Container ] }
+        constructor (container) {
+          container.schedulePostConstructor(postConstructor, [ A ])
+        }
+      }
+
+      const a = this.container.constitute(A)
+
+      expect(postConstructor).to.have.been.calledOnce
+      expect(postConstructor).to.have.been.calledOn(a)
+      expect(postConstructor).to.have.been.calledWithExactly(a)
+    })
+
+    it('should solve circular dependencies forward', function () {
+      const env = require('./samples/13_post')()
+
+      const a = this.container.constitute(env.A)
+
+      expect(a).to.be.instanceOf(env.A)
+      expect(a.b).to.be.instanceOf(env.B)
+    })
+
+    it('should solve circular dependencies backward', function () {
+      const env = require('./samples/13_post')()
+
+      const b = this.container.constitute(env.B)
+
+      expect(b).to.be.instanceOf(env.B)
+      expect(b.a).to.be.instanceOf(env.A)
     })
   })
 })

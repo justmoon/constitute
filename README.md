@@ -432,6 +432,35 @@ console.log(a1 === a2) // => true
 
 If a class has already been instantiated in the subcontainer, the subcontainer will continue to use that cached instance even if the parent container later creates an instance of its own.
 
+### Post-constructors
+
+Suppose you have two classes that depend on each other—a circular dependency. Constitute has to instantiate A before B and B before A which is impossible. You can resolve the situation using a post-constructors:
+
+``` js
+class A {
+  static constitute () { return [ Container ] }
+  constructor (container) {
+    // Assigning b in a post-constructor allows both objects to be constructed
+    // first, resolving the cyclic dependency.
+    //
+    // Note that the post-constructor still runs synchronously, before this
+    // object is returned to any third-party consumers.
+    container.schedulePostConstructor(function (b) {
+      this.b = b
+    }, [ B ])
+  }
+}
+
+class B {
+  static constitute () { return [ A ] }
+  constructor (a) {
+    this.a = a
+  }
+}
+```
+
+
+
 ## Acknowledgements
 
 This library borrows heavily from the fantastic [DI component](https://github.com/aurelia/dependency-injection) in the [Aurelia framework](http://aurelia.io/). Awesome stuff.
