@@ -266,6 +266,15 @@ describe('Container', function () {
 
       expect(container).to.equal(this.container)
     })
+
+    it('should throw when detecting a circular dependency', function () {
+      const self = this
+      this.env = require('./samples/12_circular')()
+
+      expect(function () {
+        self.container.constitute(self.env.A)
+      }).to.throw(Error, /Circular dependency detected: A => B => A/)
+    })
   })
 
   describe('bindNull', function () {
