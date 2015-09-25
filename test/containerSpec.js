@@ -275,6 +275,21 @@ describe('Container', function () {
         self.container.constitute(self.env.A)
       }).to.throw(Error, /Circular dependency detected: A => B => A/)
     })
+
+    it('should unwind circular dependency stack when a constructor throws', function () {
+      const self = this
+
+      expect(function () {
+        class A {
+          constructor () {
+            throw new Error('test')
+          }
+        }
+        self.container.constitute(A)
+      }).to.throw(Error, /test/)
+
+      expect(this.container._stack.size).to.equal(0)
+    })
   })
 
   describe('bindNull', function () {
