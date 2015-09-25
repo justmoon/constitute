@@ -143,7 +143,7 @@ There are different types of resolvers:
 You can also change how your dependencies are instantiated. There are three built-in policies:
 
 * `Singleton` - The default. Your dependency is instantiated once per container.
-* `Global` - Like a singleton, except the same instance is used even across containers. **Warning: Use of globals is generally discouraged. According to some, globals are ok for very specific use cases, such as clocks and loggers.**
+* `Global` - Like a singleton, except the same instance is used even across containers. **Warning: Use of globals is generally discouraged. According to [some](http://www.ibm.com/developerworks/webservices/library/co-single/index.html), globals are ok for very specific use cases, such as loggers.**
 * `Transient` - Your dependency is instantiated every time it is resolved.
 
 To use a different constitutor, simply return it from the `constitute` method:
