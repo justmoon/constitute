@@ -434,7 +434,7 @@ If a class has already been instantiated in the subcontainer, the subcontainer w
 
 ### Post-constructors
 
-Suppose you have two classes that depend on each other—a circular dependency. Constitute has to instantiate A before B and B before A which is impossible. You can resolve the situation using a post-constructors:
+Suppose you have two classes that depend on each other—a circular dependency. Constitute has to instantiate A before B and B before A which is impossible. You can resolve the situation using a post-constructor:
 
 ``` js
 class A {
