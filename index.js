@@ -60,3 +60,4 @@ constitute.Optional = constitute.OptionalResolver
 
 // Other classes
 constitute.Container = Container
+constitute.Util = require('./lib/util')
