@@ -53,7 +53,7 @@ Let's look at an example. For this README I'm going to use ES6 modules syntax. I
 
 Suppose we have three classes `A`, `B` and `C`. `A` depends on `B` and `C`. There are no other dependencies. We need to tell `constitute` that `A` depends on `B` and `C`. We also call the dependencies "constituents".
 
-**A.js**
+**a.js**
 ``` js
 import B from './b'
 import C from './c'
@@ -69,7 +69,7 @@ export default class A {
 
 If you are transpiling, you can also use an ES7-style decorator:
 
-**A.js** *(alternative with ES7 decorator)*
+**a.js** *(alternative with ES7 decorator)*
 ```
 import { Dependencies } from 'constitute'
 
@@ -84,12 +84,12 @@ export default class A {
 
 The classes `B` and `C` are defined without any special sugar:
 
-**B.js**
+**b.js**
 ``` js
 export default class B {}
 ```
 
-**C.js**
+**c.js**
 ``` js
 export default class C {}
 ```
@@ -459,6 +459,33 @@ class B {
 }
 ```
 
+When keeping your classes in separate files, you need to also watch out for circular `require`s.
+
+An easy solution is to put your `require` directly before `schedulePostConstructor`:
+
+**a.js**
+``` js
+class A {
+  static constitute () { return [ Container ] }
+  constructor (container) {
+    const B = require('./b')
+    container.schedulePostConstructor(function (b) {
+      this.b = b
+    }, [ B ])
+  }
+}
+```
+
+**b.js**
+``` js
+const A = require('./a')
+class B {
+  static constitute () { return [ A ] }
+  constructor (a) {
+    this.a = a
+  }
+}
+```
 
 
 ## Acknowledgements
