@@ -312,6 +312,15 @@ describe('Container', function () {
         self.container.constitute(env.FaultyFactory)
       }).to.throw(Error, /Cannot constitute a value of type object \(while constituting FaultyFactory\)/)
     })
+
+    it('should produce a useful error message when a post constructor instantiation fails', function () {
+      const env = require('./samples/14_debug')()
+      const self = this
+
+      expect(function () {
+        self.container.constitute(env.FaultyPostClass)
+      }).to.throw(Error, /Cannot constitute a value of type object \(while constituting post constructor for FaultyPostClass\)/)
+    })
   })
 
   describe('bindNull', function () {

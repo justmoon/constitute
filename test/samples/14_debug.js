@@ -1,5 +1,7 @@
 'use strict'
 
+const Container = require('../../').Container
+
 module.exports = function () {
   // Example of an instantiation that fails. We want to use this to test and make
   // sure that constitute produces stack traces that enable easy debugging.
@@ -20,5 +22,14 @@ module.exports = function () {
   function FaultyFactory () {
   }
 
-  return { FaultyClass, ExampleClass, FaultyFactory }
+  class FaultyPostClass {
+    static constitute () { return [ Container ] }
+    constructor (container) {
+      container.schedulePostConstructor(function () {
+
+      }, [ {} ])
+    }
+  }
+
+  return { FaultyClass, ExampleClass, FaultyFactory, FaultyPostClass }
 }
