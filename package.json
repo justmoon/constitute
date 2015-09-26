@@ -1,6 +1,6 @@
 {
   "name": "constitute",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "Minimalistic Dependency Injection (DI) for ES6",
   "repository": {
     "type": "git",
