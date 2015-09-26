@@ -294,6 +294,24 @@ describe('Container', function () {
 
       expect(this.container._stack.size).to.equal(0)
     })
+
+    it('should produce a useful error message when a class instantiation fails', function () {
+      const env = require('./samples/14_debug')()
+      const self = this
+
+      expect(function () {
+        self.container.constitute(env.ExampleClass)
+      }).to.throw(Error, /Cannot constitute a value of type object \(while constituting FaultyClass\)/)
+    })
+
+    it('should produce a useful error message when a factory instantiation fails', function () {
+      const env = require('./samples/14_debug')()
+      const self = this
+
+      expect(function () {
+        self.container.constitute(env.FaultyFactory)
+      }).to.throw(Error, /Cannot constitute a value of type object \(while constituting FaultyFactory\)/)
+    })
   })
 
   describe('bindNull', function () {
