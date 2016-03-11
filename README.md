@@ -165,7 +165,7 @@ By default, classes resolve to a new instance of themselves. But what if we want
 
 #### Binding for tests
 
-Let's say we're testing and we to replace our `Database` service with a `MockDatabase` service. But first, here's our database service:
+Let's say we're testing and we need to replace our `Database` service with a `MockDatabase` service. But first, here's our database service:
 
 (In the interest of brevity, we'll skip imports for this example.)
 
@@ -204,7 +204,7 @@ describe('App', function () {
     this.container = new constitute.Container()
 
     // Then we tell it to bind the database to the mock database
-    this.container.bind(Database, MockDatabase)
+    this.container.bindClass(Database, MockDatabase)
 
     // Finally we can instantiate the app
     this.app = this.container.constitute(App)
